@@ -1,0 +1,8 @@
+<search [items]="videosItems | async"
+        [imageProperty]="'thumbnailUrl'"
+        [headerProperty]="'title'"
+        [subHeaderProperty]="'channelTitle'"
+        (addItem)="addVideo($event)"
+        (removeItem)="removeVideo($event)"
+        (search)="searchVideos($event)">
+</search>

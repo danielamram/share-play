@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-navbar>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <form (ngSubmit)="createGroup()">
+    <ion-item>
+      <ion-avatar item-start>
+        <img [src]="group.photoURL">
+      </ion-avatar>
+      <ion-input type="text" [(ngModel)]="group.name" name="name" placeholder="Name" clearInput="true"></ion-input>
+    </ion-item>
+    <ion-item-divider>
+    </ion-item-divider>
+    <ion-list>
+      <ion-list-header>
+        Members
+        <button ion-button item-end type='button' default clear (click)="addUserToGroup()">
+          <ion-icon name="person-add" large></ion-icon>
+        </button>
+      </ion-list-header>
+      <ion-item *ngFor="let member of group.members">
+        <ion-avatar item-start>
+          <img [src]="member.photoURL">
+        </ion-avatar>
+        <h2>{{member.displayName}}</h2>
+      </ion-item>
+    </ion-list>
+    <ion-footer no-border>
+      <button ion-button full outline type="submit" block>Save group</button>
+    </ion-footer>
+  </form>
+</ion-content>

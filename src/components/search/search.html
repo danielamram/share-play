@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar>
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      (ionCancel)="onCancel($event)"
+      [formControl]="searchControl"
+      (ionInput)="onSearchInput()">
+    </ion-searchbar>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <div *ngIf="searching" class="spinner-container">
+    <ion-spinner></ion-spinner>
+  </div>
+  <ion-list>
+    <ion-item *ngFor="let item of items">
+      <ion-thumbnail item-start>
+        <img [src]="item[imageProperty]">
+      </ion-thumbnail>
+      <h2>{{item[headerProperty]}}</h2>
+      <p>{{item[subHeaderProperty]}}</p>
+      <button ion-button outline item-end (click)="toggleItem(item)">
+        <ion-icon [name]="item.$key ? 'trash' : 'add'"></ion-icon>
+      </button>
+    </ion-item>
+  </ion-list>
+</ion-content>

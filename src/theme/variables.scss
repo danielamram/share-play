@@ -34,13 +34,14 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #488aff,
-  secondary:  #32db64,
+  primary:    #f4f4f4,
+  secondary:  #757570,
   danger:     #f53d3d,
-  light:      #f4f4f4,
-  dark:       #222
+  light:      #e3eef7,
+  dark:       #413b3a,
+  button:     #575050,
+  header:     #232323
 );
-
 
 // App iOS Variables
 // --------------------------------------------------
@@ -71,6 +72,7 @@ $colors: (
 // default are overridden.
 
 @import "ionic.theme.default";
+@import url("https://cdn.plyr.io/2.0.13/plyr.css");
 
 
 // Ionicons
