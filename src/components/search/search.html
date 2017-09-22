@@ -1,8 +1,6 @@
 <ion-header>
   <ion-navbar>
     <ion-searchbar
-      [(ngModel)]="searchTerm"
-      (ionCancel)="onCancel($event)"
       [formControl]="searchControl"
       (ionInput)="onSearchInput()">
     </ion-searchbar>
@@ -19,8 +17,8 @@
       </ion-thumbnail>
       <h2>{{item[headerProperty]}}</h2>
       <p>{{item[subHeaderProperty]}}</p>
-      <button ion-button outline item-end (click)="toggleItem(item)">
-        <ion-icon [name]="item.$key ? 'trash' : 'add'"></ion-icon>
+      <button type='button' ion-button item-end default clear icon-only (tap)="toggleItem(item)">
+        <ion-icon [name]="item[existProperty] ? 'trash' : 'add'"></ion-icon>
       </button>
     </ion-item>
   </ion-list>

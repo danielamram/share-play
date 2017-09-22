@@ -1,8 +1,15 @@
-<ion-item *ngIf="groupElement" (tap)="click(groupElement)">
+<ion-item *ngIf="groupElement" (tap)="click()" (press)="editGroup($event, groupElement)">
   <ion-avatar item-start>
     <img [src]="groupElement.photoURL">
   </ion-avatar>
   <h2>{{groupElement.name}}</h2>
-  <p *ngFor="let user of groupElement.members">{{user.displayName}} </p>
-  <ion-badge item-end>{{groupElement.playlist.length}} Vids</ion-badge>
+  <p>
+    <span *ngFor="let user of groupElement.members; let i = index">
+      {{user.displayName}}
+    </span>
+  </p>
+  <ion-badge item-end>
+    <ion-icon name="musical-notes" small></ion-icon>
+    {{groupElement.playlist.length}}
+  </ion-badge>
 </ion-item>

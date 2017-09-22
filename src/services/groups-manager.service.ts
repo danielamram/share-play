@@ -1,37 +1,37 @@
-import { Injectable } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import {Injectable} from '@angular/core';
+import {AngularFireDatabase} from 'angularfire2/database';
 import 'rxjs/add/operator/map';
-import { IGroup } from '../models/group.model';
-import { UserManagerProvider } from './user-manager';
-import {Observable} from "rxjs/Observable";
+import {UserManagerProvider} from './user-manager';
 
 @Injectable()
 export class GroupsManagerService {
-  private groups: FirebaseListObservable<IGroup[]>;
 
   constructor(private db: AngularFireDatabase,
-              private userManagerProvider:UserManagerProvider) {
-  }
-
-  createNewGroup(group: IGroup) {
-    let members = group.members;
-    group.members = [];
-    let newGroup = this.db.list('/groups/').push(group);
-    members.forEach((member) => {
-      this.addUserToGroup(member, newGroup.key);
-    })
-  }
-
-  addUserToGroup(user, groupKey:string) {
-    this.db.list(`/groups/${groupKey}/members`).push(user);
-    this.db.list(`/users/${user.uid}/groups`).push(groupKey);
+              private userManagerProvider: UserManagerProvider) {
   }
 
   getGroups() {
     return this.userManagerProvider.getGroups()
       .map((groups) => groups
-        .map(group => this.db.object(`/groups/${group.$value}`)
+        .map(groupKey => this.db.object(`/groups/${groupKey}`)
           .do((group) => group.members = Object.values(group.members))
           .do((group) => group.playlist = group.playlist ? Object.values(group.playlist) : [])));
+  }
+
+  async upsertGroup(group) {
+    let groupKey:string;
+    if (group.$key) {
+      await this.db.list('/groups/').update(group.$key, group);
+      groupKey = group.$key
+    }
+    else {
+      groupKey = this.db.list('/groups/').push(group).key
+    }
+
+    return Promise.all(this.assignGroupToUsers(group.members, groupKey));
+  }
+
+  private assignGroupToUsers(members:any[], groupKey:string) {
+    return members.map(member => this.db.list(`/users/${member.uid}/groups`).set(groupKey, true));
   }
 }

@@ -24,6 +24,7 @@ import { UserManagerProvider } from '../services/user-manager';
 import { GroupsManagerService } from '../services/groups-manager.service';
 import {GroupComponent} from "../components/group/group";
 import {SearchComponent} from "../components/search/search";
+import {SearchUsersPage} from "../pages/search-users/search-users";
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import {SearchComponent} from "../components/search/search";
     HomePage,
     TabsPage,
     SearchVideosPage,
+    SearchUsersPage,
     EditGroupPage,
     LoginPage,
     GroupComponent,
@@ -54,6 +56,7 @@ import {SearchComponent} from "../components/search/search";
     HomePage,
     TabsPage,
     SearchVideosPage,
+    SearchUsersPage,
     EditGroupPage,
     LoginPage,
     GroupComponent,

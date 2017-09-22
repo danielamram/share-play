@@ -23,4 +23,8 @@ export class HomePage {
   navToPlaylist(group:any) {
     this.navCtrl.push(AboutPage, {groupKey: group.$key});
   }
+
+  editGroup(group:any){
+    this.navCtrl.push(EditGroupPage, {group: group});
+  }
 }

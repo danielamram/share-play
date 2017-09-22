@@ -1,20 +1,22 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { FormControl } from '@angular/forms';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {FormControl} from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'search',
   templateUrl: 'search.html'
 })
-export class SearchComponent implements OnInit {
-  @Input() items:any[];
-  @Input() imageProperty:string;
-  @Input() headerProperty:string;
-  @Input() subHeaderProperty:string;
-  @Output() addItem:EventEmitter<any>;
-  @Output() removeItem:EventEmitter<any>;
-  @Output() search:EventEmitter<string>;
-  searchTerm: string = '';
+export class SearchComponent implements OnInit, OnDestroy {
+  @Input() items: any[];
+  @Input() imageProperty: string;
+  @Input() headerProperty: string;
+  @Input() subHeaderProperty: string;
+  @Input() existProperty: string;
+  @Output() addItem: EventEmitter<any>;
+  @Output() removeItem: EventEmitter<any>;
+  @Output() search: EventEmitter<string>;
+  subscription:Subscription;
   searchControl: FormControl;
   searching: boolean;
 
@@ -26,18 +28,24 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
-      this.searching = false;
-      this.search.emit(search);
-    });
+    this.subscription = this.searchControl.valueChanges
+      .debounceTime(700)
+      .subscribe(searchTerm => {
+        this.searching = false;
+        this.search.emit(searchTerm);
+      });
   }
 
-  onSearchInput(){
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  onSearchInput() {
     this.searching = true;
   }
 
-  toggleItem(item:any) {
-    if (item.$key) {
+  toggleItem(item: any) {
+    if (item[this.existProperty]) {
       this.removeItem.emit(item);
     }
     else {

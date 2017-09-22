@@ -1,20 +1,27 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      <img [src]="'/assets/logo.png'">
+      <img [src]="'/assets/login-logo.png'" style="height: 40px">
     </ion-title>
+    <ion-buttons end>
+      <button type='button' ion-button clear icon-only>
+        <ion-icon name="settings"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
   <ion-list *ngIf="groups | async">
-    <group *ngFor="let group of groups | async" [groupElement]="(group | async)" (groupClicked)="navToPlaylist($event)"></group>
+    <group *ngFor="let group of groups | async"
+           [groupElement]="(group | async)"
+           (groupClicked)="navToPlaylist($event)"
+           (groupPressed)="editGroup($event)">
+    </group>
   </ion-list>
   <ion-fab bottom right>
     <button [navPush]="editGroupPage" ion-fab color="primary">
       <ion-icon name="add"></ion-icon>
     </button>
   </ion-fab>
-  <ion-footer no-border>
-  </ion-footer>
 </ion-content>

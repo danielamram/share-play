@@ -1,3 +1,8 @@
-page-group {
-
+page-edit-group {
+  input,
+  textarea {
+    color: white;
+    text-shadow: none;
+    -webkit-text-fill-color: initial;
+  }
 }

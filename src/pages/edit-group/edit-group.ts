@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
-import {NavController, NavParams, ToastController} from 'ionic-angular';
-import { GroupsManagerService } from '../../services/groups-manager.service';
+import {Component} from '@angular/core';
+import {ModalController, NavController, NavParams, ToastController} from 'ionic-angular';
+import {GroupsManagerService} from '../../services/groups-manager.service';
 import {UserManagerProvider} from "../../services/user-manager";
+import {SearchUsersPage} from "../search-users/search-users";
+import {mergeMap} from "rxjs/operator/mergeMap";
 
 /**
  * Generated class for the editGroupPage page.
@@ -15,33 +17,49 @@ import {UserManagerProvider} from "../../services/user-manager";
   templateUrl: 'edit-group.html',
 })
 export class EditGroupPage {
-  group = {
-    name: '',
-    members: [],
-    photoURL: 'assets/group-avatars/group',
-    playlist: []
-  };
+  group: any;
 
-  constructor(public navCtrl: NavController,
-              private userManagerProvider:UserManagerProvider,
-              private groupsManagerService:GroupsManagerService,
+  constructor(private navCtrl: NavController,
+              private params: NavParams,
+              private userManagerProvider: UserManagerProvider,
+              private groupsManagerService: GroupsManagerService,
+              private modalCtrl: ModalController,
               private toastCtrl: ToastController) {
+    this.group = this.params.get('group') ? this.params.get('group') : this.initGroup();
+  }
+
+  addUserToGroup() {
+    let searchPage = this.modalCtrl.create(SearchUsersPage);
+    searchPage.onDidDismiss(user => {
+      if (user) {
+        let existMember = this.group.members.find(member => member.uid === user.uid);
+        this.group.members = existMember ? this.group.members.filter(member => member.uid !== user.uid) : [...this.group.members, user];
+      }
+    });
+    searchPage.present();
+  }
+
+  async saveGroup() {
+    await this.groupsManagerService.upsertGroup(this.group);
+    this.showToast();
+    this.navCtrl.pop();
+  }
+
+  private initGroup() {
     let randomNum = Math.floor((Math.random() * 4) + 1) + '';
-    this.group.photoURL += randomNum +='.png';
-    this.group.members.push(this.userManagerProvider.user);
+    return {
+      name: '',
+      members: [this.userManagerProvider.user],
+      photoURL: `assets/group-avatars/group${randomNum}.png`,
+      playlist: []
+    };
   }
 
-  addUserToGroup(){
-    console.log('hi');
-  }
-
-  createGroup() {
-    this.groupsManagerService.createNewGroup(this.group);
+  private showToast() {
     this.toastCtrl.create({
-      message: 'Group created successfully',
+      message: 'Group saved successfully',
       duration: 1500,
       position: 'bottom'
     }).present();
-    this.navCtrl.pop();
   }
 }

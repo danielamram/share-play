@@ -28,13 +28,13 @@ export class SearchVideosPage {
   }
 
   searchVideos(searchTerm:string) {
-    this.videosItems = Rx.Observable.combineLatest(
+    this.videosItems = searchTerm ? Rx.Observable.combineLatest(
       this.youtubeManagerService.fetchVideos(searchTerm),
       this.videoManagerService.getPlaylist(this.params.get('groupKey')), (queryVideos, playlist) => {
       return queryVideos.map((video) => {
         let videoExist = playlist.find((playlistVideo) => playlistVideo.id === video.id);
         return videoExist ? videoExist : video;
       })
-    });
+    }) : Observable.from([]);
   }
 }

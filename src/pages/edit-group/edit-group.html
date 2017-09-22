@@ -5,7 +5,7 @@
 
 
 <ion-content padding>
-  <form (ngSubmit)="createGroup()">
+  <form (ngSubmit)="saveGroup()">
     <ion-item>
       <ion-avatar item-start>
         <img [src]="group.photoURL">
@@ -16,9 +16,9 @@
     </ion-item-divider>
     <ion-list>
       <ion-list-header>
-        Members
-        <button ion-button item-end type='button' default clear (click)="addUserToGroup()">
-          <ion-icon name="person-add" large></ion-icon>
+        {{group.members.length}} Members
+        <button type='button' ion-button item-end default clear icon-only (tap)="addUserToGroup()">
+          <ion-icon name="person-add"></ion-icon>
         </button>
       </ion-list-header>
       <ion-item *ngFor="let member of group.members">
